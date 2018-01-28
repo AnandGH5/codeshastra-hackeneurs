@@ -174,6 +174,21 @@ def viewprofile(request, p=None):
     else:
         return redirect('/authen/login/')
 
+def topics(request, p=None):
+    if request.user.is_authenticated():
+        if p is not None:
+            user = User.objects.get(username=p)
+            pr = Profile.objects.get(user=user)
+        else:
+            pr = Profile.objects.get(user=request.user)
+        fly = Flyer.objects.filter(creater=pr)
+        photos = Photo.objects.filter(user=pr)
+        videos = Video.objects.filter(user=pr)
+        print(photos)
+        return render(request, 'topics.html', {"profile": pr, "flyers": fly, "photos": photos, "videos": videos})
+    else:
+        return redirect('/authen/login/')
+
 
 def myaccount(request):
     if request.user.is_authenticated():
